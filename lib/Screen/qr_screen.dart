@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element, avoid_print, prefer_const_constructors
+
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
@@ -79,7 +81,7 @@ class _QRViewExampleState extends State<QRViewExample> {
     });
     controller.scannedDataStream.listen((scanData) {
       // Handle the scanned data here
-      print('Scanned Data: $scanData');
+      print('Scanned Data: $scanData 123');
     });
   }
 

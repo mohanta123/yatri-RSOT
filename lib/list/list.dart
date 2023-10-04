@@ -1,18 +1,19 @@
 class ListScreen {
-  List itemName = [
-    "Chicken Biriyani",
+  ///category item screen
+  List CatItemName = [
+    "Chicken ",
     "Mutton",
     "Egg",
-    "Chicken Tikka",
-    "Paneer ",
-    "Paneer bBriyani",
-    "Chicken Fried Rice",
-    "Chicken Tandoori",
-    "Veg Fried Rice",
     "Fish",
-    "Fish Masala",
-    "Prawns Biriyani",
-    "Veg Biriyani",
-    "Chicken Lollipop"
+    "Paneer ",
+  ];
+
+///item list
+  List itemList = [
+    "Chicken Biriyani ",
+    "Chicken Masala",
+    "Chicken Curry",
+    "Chicken Lollipop",
+    "Chicken Tikka ",
   ];
 }
