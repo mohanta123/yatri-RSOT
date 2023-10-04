@@ -2,16 +2,27 @@
 
 import 'package:flutter/material.dart';
 import 'package:yatri_rsot/color/color.dart';
+import 'package:yatri_rsot/list/list.dart';
 
-class CartScrren extends StatefulWidget {
-  const CartScrren({super.key});
+class CartScreen extends StatefulWidget {
+  const CartScreen({super.key});
 
   @override
-  State<CartScrren> createState() => _CartScrrenState();
+  State<CartScreen> createState() => _CartScreenState();
 }
 
-class _CartScrrenState extends State<CartScrren> {
-  MyColor colosInstance = MyColor();
+class _CartScreenState extends State<CartScreen> {
+  ListScreen listInstance = ListScreen();
+  MyColor colorinstance = MyColor();
+  int count = 1;
+  int itemPrice = 150;
+  int? totalPrice = 0;
+  void calculate() {
+    setState(() {
+      totalPrice = itemPrice * count;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double deviceHeight = MediaQuery.of(context).size.height;
@@ -28,9 +39,9 @@ class _CartScrrenState extends State<CartScrren> {
             color: Colors.white,
           ),
         ),
-        backgroundColor: colosInstance.blue,
+        backgroundColor: colorinstance.blue,
         title: Text(
-          "Item List",
+          "Cart",
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -70,38 +81,56 @@ class _CartScrrenState extends State<CartScrren> {
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(width: 2),
-                                borderRadius: BorderRadius.circular(50),
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  if (count > 1) {
+                                    count--;
+                                    calculate();
+                                  }
+                                });
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(width: 2),
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                height: deviceHeight * 0.06,
+                                width: deviceWidth * 0.1,
+                                alignment: Alignment
+                                    .topCenter, // Center the child within the Container
+                                child: Icon(Icons.minimize),
                               ),
-                              height: deviceHeight * 0.06,
-                              width: deviceWidth * 0.1,
-                              alignment: Alignment
-                                  .topCenter, // Center the child within the Container
-                              child: Icon(Icons.minimize),
                             ),
                             SizedBox(
                               width: 10,
                             ),
                             Text(
-                              "1",
+                              count.toString(),
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 18),
                             ),
                             SizedBox(
                               width: 10,
                             ),
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(width: 2),
-                                borderRadius: BorderRadius.circular(50),
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  count++;
+                                  calculate();
+                                });
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(width: 2),
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                height: deviceHeight * 0.06,
+                                width: deviceWidth * 0.1,
+                                alignment: Alignment
+                                    .center, // Center the child within the Container
+                                child: Icon(Icons.add),
                               ),
-                              height: deviceHeight * 0.06,
-                              width: deviceWidth * 0.1,
-                              alignment: Alignment
-                                  .center, // Center the child within the Container
-                              child: Icon(Icons.add),
                             )
                           ],
                         ),
@@ -111,6 +140,17 @@ class _CartScrrenState extends State<CartScrren> {
                 ),
               );
             }),
+      ),
+      bottomNavigationBar: Container(
+        color: colorinstance.red,
+        height: deviceHeight * 0.07,
+        width: deviceWidth,
+        child: Center(
+            child: Text(
+          "ORDER",
+          style: TextStyle(
+              fontSize: 19, color: Colors.white, fontWeight: FontWeight.bold),
+        )),
       ),
     );
   }

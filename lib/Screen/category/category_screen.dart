@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
-import 'package:yatri_rsot/category/cart_screen.dart';
-import 'package:yatri_rsot/category/item_screen.dart';
+import 'package:yatri_rsot/Screen/category/item_screen.dart';
+
 import 'package:yatri_rsot/color/color.dart';
 import 'package:yatri_rsot/list/list.dart';
 

@@ -1,10 +1,34 @@
-// ignore_for_file: unused_element, avoid_print, prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:flutter/material.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
+
+void main() => runApp(const MaterialApp(home: MyHome()));
+
+class MyHome extends StatelessWidget {
+  const MyHome({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Flutter Demo Home Page')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => const QRViewExample(),
+            ));
+          },
+          child: const Text('qrView'),
+        ),
+      ),
+    );
+  }
+}
 
 class QRViewExample extends StatefulWidget {
   const QRViewExample({Key? key}) : super(key: key);
@@ -14,64 +38,81 @@ class QRViewExample extends StatefulWidget {
 }
 
 class _QRViewExampleState extends State<QRViewExample> {
+  Barcode? result;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-
   bool isFlashOn = false;
+
+  // In order to get hot reload to work we need to pause the camera if the platform
+  // is Android, or resume the camera if the platform is iOS.
+  @override
+  void reassemble() {
+    super.reassemble();
+    if (Platform.isAndroid) {
+      controller!.pauseCamera();
+    }
+    controller!.resumeCamera();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('QR Code Scanner'),
-      //   actions: <Widget>[
-      //     IconButton(
-      //       icon: Icon(Icons.qr_code),
-      //       onPressed: () {
-      //         // Open QR code scanner here
-      //         _openQRScanner();
-      //       },
-      //     ),
-      //   ],
-      // ),
-      body: Stack(
-        alignment: Alignment.center,
+      appBar: AppBar(title: const Text('QR Code Scanner')),
+      body: Column(
         children: <Widget>[
-          _buildQrView(context), // Add your QR code scanner here
-          Positioned(
-            bottom: 46, // Adjust this value to your preferred position
-            child: IconButton(
-              icon: Icon(
-                isFlashOn ? Icons.flash_on : Icons.flash_off,
-                color: isFlashOn ? Colors.yellow : Colors.grey,
-                size: 30,
-              ),
-              onPressed: () {
-                // Toggle flash here
-                controller?.toggleFlash();
-                setState(() {
-                  isFlashOn = !isFlashOn;
-                });
-              },
-            ),
-          ),
+          Expanded(flex: 4, child: _buildQrView(context)),
+          _buildControls(),
         ],
       ),
     );
   }
 
   Widget _buildQrView(BuildContext context) {
+    var scanArea = (MediaQuery.of(context).size.width < 400 ||
+            MediaQuery.of(context).size.height < 400)
+        ? 150.0
+        : 300.0;
+
     return QRView(
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
-        borderColor: Colors.green,
+        borderColor: Colors.red,
         borderRadius: 10,
         borderLength: 30,
         borderWidth: 10,
-        cutOutSize: MediaQuery.of(context).size.width * 0.8,
+        cutOutSize: scanArea,
       ),
       onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
+    );
+  }
+
+  Widget _buildControls() {
+    return Column(
+      children: <Widget>[
+        if (result != null)
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}',
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[],
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: FloatingActionButton(
+            onPressed: _toggleFlash,
+            child: Icon(
+              isFlashOn ? Icons.flash_on : Icons.flash_off,
+              color: isFlashOn ? Colors.grey : Colors.grey,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -80,8 +121,9 @@ class _QRViewExampleState extends State<QRViewExample> {
       this.controller = controller;
     });
     controller.scannedDataStream.listen((scanData) {
-      // Handle the scanned data here
-      print('Scanned Data: $scanData 123');
+      setState(() {
+        result = scanData;
+      });
     });
   }
 
@@ -94,11 +136,17 @@ class _QRViewExampleState extends State<QRViewExample> {
     }
   }
 
-  void _openQRScanner() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => QRViewExample()),
-    );
+  void _toggleFlash() {
+    if (controller != null) {
+      if (isFlashOn) {
+        controller!.toggleFlash();
+      } else {
+        controller!.toggleFlash();
+      }
+      setState(() {
+        isFlashOn = !isFlashOn;
+      });
+    }
   }
 
   @override
