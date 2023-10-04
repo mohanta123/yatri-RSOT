@@ -1,12 +1,17 @@
+// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:yatri_rsot/Screen/sign_up_screen.dart';
 import 'home_screen.dart';
+
 class Login_Screen extends StatefulWidget {
   const Login_Screen({super.key});
   @override
   State<Login_Screen> createState() => _Login_ScreenState();
 }
+
 class _Login_ScreenState extends State<Login_Screen> {
   Color getColor(Set<MaterialState> states) {
     const Set<MaterialState> interactiveStates = <MaterialState>{
@@ -19,11 +24,13 @@ class _Login_ScreenState extends State<Login_Screen> {
     }
     return Colors.indigo;
   }
+
   bool passwordVisible = true;
   void initSate() {
     super.initState();
     passwordVisible = false;
   }
+
   @override
   Widget build(BuildContext context) {
     double deviceHeight = MediaQuery.of(context).size.height;
@@ -36,12 +43,16 @@ class _Login_ScreenState extends State<Login_Screen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("User Name",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+            Text(
+              "User Name",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
             TextField(
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(vertical: 5),
                 prefixIcon: Icon(
-                  Icons.person,color: Colors.green,
+                  Icons.person,
+                  color: Colors.green,
                 ),
                 fillColor: Colors.grey.shade100,
                 filled: true,
@@ -52,14 +63,20 @@ class _Login_ScreenState extends State<Login_Screen> {
                 ),
               ),
             ),
-            SizedBox(height: 20,),
-            Text("Password",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              "Password",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
             TextField(
               obscureText: passwordVisible,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(vertical: 5),
                 prefixIcon: Icon(
-                  Icons.lock,color: Colors.green,
+                  Icons.lock,
+                  color: Colors.green,
                 ),
                 hintText: "Password",
                 border: OutlineInputBorder(
@@ -74,7 +91,7 @@ class _Login_ScreenState extends State<Login_Screen> {
                       : Icons.visibility_off),
                   onPressed: () {
                     setState(
-                          () {
+                      () {
                         passwordVisible = !passwordVisible;
                       },
                     );
@@ -86,39 +103,52 @@ class _Login_ScreenState extends State<Login_Screen> {
               keyboardType: TextInputType.visiblePassword,
               textInputAction: TextInputAction.done,
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             Center(
               child: Column(
                 children: [
                   Container(
                     height: 45,
-                      width: 120,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                          onPressed: (){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (builder) => Home_screen()),
-                            );
-                          }, child: const Text("Log In",style: TextStyle(color: Colors.white),)),
+                    width: 120,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) => HomeScreen()),
+                          );
+                        },
+                        child: const Text(
+                          "Log In",
+                          style: TextStyle(color: Colors.white),
+                        )),
                   ),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text("Dont have an account ?"),
                       InkWell(
-                        onTap: (){
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (builder) => Sign_UP_Screen()),
-                          );
-
-                        },
-                          child: Text("Sign Up",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.green),))
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (builder) => Sign_UP_Screen()),
+                            );
+                          },
+                          child: Text(
+                            "Sign Up",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green),
+                          ))
                     ],
                   ),
                 ],
@@ -127,7 +157,6 @@ class _Login_ScreenState extends State<Login_Screen> {
           ],
         ),
       ),
-
     );
   }
 }

@@ -1,59 +1,42 @@
-import 'dart:io';
-import 'package:flutter/foundation.dart';
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, must_be_immutable
+
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
-class Home_screen extends StatefulWidget {
-  const Home_screen({super.key});
-  @override
-  State<Home_screen> createState() => _Home_screenState();
-}
-class _Home_screenState extends State<Home_screen> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode? result;
-  QRViewController? controller;
-  @override
-  void reassemble() {
-    super.reassemble();
-    if (Platform.isAndroid) {
-      controller!.pauseCamera();
-    }
-  }
+import 'package:yatri_rsot/Screen/cat_screen.dart';
+import 'package:yatri_rsot/Screen/qr_screen.dart';
+import 'package:yatri_rsot/color/color.dart';
+
+class HomeScreen extends StatelessWidget {
+  MyColor colosInstance = MyColor();
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 5,
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Center(
-              child: (result != null)
-                  ? Text(
-                  'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
-                  : Text('Scan a code'),
-            ),
-          )
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: colosInstance.blue,
+        title: Text(
+          'Home',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => QRViewExample()),
+            );
+          },
+          child: Text("Open QR Scanner"),
+        ),
+      ),
+      bottomNavigationBar: ElevatedButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (builder) => CatScreen()),
+          );
+        },
+        child: Text("next"),
       ),
     );
-  }
-  void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-      });
-    });
-  }
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
   }
 }
